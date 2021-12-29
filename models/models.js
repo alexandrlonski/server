@@ -12,6 +12,7 @@ const User = sequelize.define("user", {
   email: { allowNull: false, unique: true, type: DataTypes.STRING },
   password: { allowNull: false, type: DataTypes.STRING },
   role: { type: DataTypes.STRING, defaultValue: "USER" },
+  name: { type: DataTypes.STRING },
 });
 
 const Basket = sequelize.define("basket", {
@@ -51,8 +52,6 @@ const Film = sequelize.define("film", {
   title: { allowNull: false, unique: true, type: DataTypes.STRING },
   description: { allowNull: false, type: DataTypes.TEXT },
   img: { allowNull: false, type: DataTypes.STRING },
-  showstart: { allowNull: false, type: DataTypes.DATE },
-  showend: { allowNull: false, type: DataTypes.DATE },
 });
 
 const Bonus = sequelize.define("bonus", {
