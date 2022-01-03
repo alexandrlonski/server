@@ -10,6 +10,6 @@ const router = new Router();
 router.post("/", createFilm);
 router.get("/", getAllFilms);
 router.get("/:id", getOneFilm);
-router.delete("/", deleteFilm);
+router.delete("/:id", deleteFilm);
 
 module.exports = router;

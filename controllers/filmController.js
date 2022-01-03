@@ -35,6 +35,11 @@ const getOneFilm = async (req, res) => {
   const film = await Film.findOne({ where: { id } });
   return res.json(film);
 };
-const deleteFilm = async (req, res) => {};
+const deleteFilm = async (req, res) => {
+  const { id } = req.params;
+  const film = await Film.destroy({ where: { id: id } });
+  console.log(film);
+  return res.json(film);
+};
 
 module.exports = { createFilm, getOneFilm, getAllFilms, deleteFilm };
