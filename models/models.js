@@ -64,14 +64,14 @@ const Bonus = sequelize.define("bonus", {
   name: { allowNull: false, unique: true, type: DataTypes.STRING },
 });
 
-const FilmsAndCinemas = sequelize.define("films-list", {
-  id: {
-    allowNull: false,
-    autoIncrement: true,
-    primaryKey: true,
-    type: DataTypes.INTEGER,
-  },
-});
+// const FilmsAndCinemas = sequelize.define("films-list", {
+//   id: {
+//     allowNull: false,
+//     autoIncrement: true,
+//     primaryKey: true,
+//     type: DataTypes.INTEGER,
+//   },
+// });
 
 const Seat = sequelize.define("seat", {
   id: {
@@ -99,6 +99,7 @@ const Holl = sequelize.define("holl", {
     primaryKey: true,
     type: DataTypes.INTEGER,
   },
+  name: { type: DataTypes.STRING, allowNull: false },
 });
 
 const Cinema = sequelize.define("cinema", {
@@ -108,13 +109,28 @@ const Cinema = sequelize.define("cinema", {
     primaryKey: true,
     type: DataTypes.INTEGER,
   },
+  name: { allowNull: false, type: DataTypes.STRING },
   city: { allowNull: false, type: DataTypes.STRING },
-  coordinate: { allowNull: false, type: DataTypes.STRING },
+  description: { allowNull: false, type: DataTypes.TEXT },
+  img: { allowNull: false, type: DataTypes.STRING },
 });
 
-const CinemaFilmsAndCinemas = sequelize.define("cinema_filmsInlist", {
+const CinemaHoll = sequelize.define("cinema_holl", {
   id: {
-    allowNull: false,
+    autoIncrement: true,
+    primaryKey: true,
+    type: DataTypes.INTEGER,
+  },
+});
+const CinemaFilm = sequelize.define("cinema_film", {
+  id: {
+    autoIncrement: true,
+    primaryKey: true,
+    type: DataTypes.INTEGER,
+  },
+});
+const HollFilm = sequelize.define("holl_film", {
+  id: {
     autoIncrement: true,
     primaryKey: true,
     type: DataTypes.INTEGER,
@@ -136,11 +152,11 @@ Bonus.belongsTo(Ticket);
 Ticket.hasOne(Film);
 Film.belongsTo(Ticket);
 
-FilmsAndCinemas.hasMany(Film);
-Film.belongsTo(FilmsAndCinemas);
+// FilmsAndCinemas.hasMany(Film);
+// Film.belongsTo(FilmsAndCinemas);
 
-FilmsAndCinemas.belongsToMany(Cinema, { through: CinemaFilmsAndCinemas });
-Cinema.belongsToMany(FilmsAndCinemas, { through: CinemaFilmsAndCinemas });
+Holl.belongsToMany(Cinema, { through: CinemaHoll });
+Cinema.belongsToMany(Holl, { through: CinemaHoll });
 
 Schema.hasMany(Seat);
 Seat.belongsTo(Schema);
@@ -148,8 +164,11 @@ Seat.belongsTo(Schema);
 Holl.hasOne(Schema);
 Schema.belongsTo(Holl);
 
-Cinema.hasMany(Holl);
-Holl.belongsTo(Cinema);
+Cinema.belongsToMany(Film, { through: CinemaFilm });
+Film.belongsToMany(Cinema, { through: CinemaFilm });
+
+Holl.belongsToMany(Film, { through: HollFilm });
+Film.belongsToMany(Holl, { through: HollFilm });
 
 module.exports = {
   User,
@@ -157,11 +176,10 @@ module.exports = {
   BasketTicket,
   Ticket,
   Film,
-  FilmsAndCinemas,
   Holl,
   Schema,
   Cinema,
+  CinemaHoll,
   Seat,
   Bonus,
-  CinemaFilmsAndCinemas,
 };

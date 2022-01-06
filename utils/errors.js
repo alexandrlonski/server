@@ -8,5 +8,8 @@ const USER = {
 const FILM = {
   filmAlreadyExists: "Film with this title already exists",
 };
+const CINEMA = {
+  cinemaAlreadyExists: "Cinema with this city and name already exists",
+};
 
-module.exports = { USER, FILM };
+module.exports = { USER, FILM, CINEMA };

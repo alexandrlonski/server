@@ -15,7 +15,11 @@ const createFilm = async (req, res, next) => {
     let fileName = uuid.v4() + ".jpg";
     img.mv(path.resolve(__dirname, "..", "static", fileName));
 
-    const film = await Film.create({ title, description, img: fileName });
+    const film = await Film.create({
+      title,
+      description,
+      img: fileName,
+    });
 
     return res.json(film);
   } catch (e) {
@@ -28,6 +32,7 @@ const getAllFilms = async (req, res) => {
   limit = limit || 5;
   let offset = page * limit - limit;
   const films = await Film.findAndCountAll({ limit, offset });
+
   return res.json(films);
 };
 const getOneFilm = async (req, res) => {
@@ -38,7 +43,6 @@ const getOneFilm = async (req, res) => {
 const deleteFilm = async (req, res) => {
   const { id } = req.params;
   const film = await Film.destroy({ where: { id: id } });
-  console.log(film);
   return res.json(film);
 };
 
