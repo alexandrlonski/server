@@ -1,3 +1,4 @@
+const { StatusCodes } = require("http-status-codes");
 class ApiError extends Error {
   constructor(status, message) {
     super();
@@ -6,15 +7,15 @@ class ApiError extends Error {
   }
 
   static badRequest(message) {
-    return new ApiError(404, message);
+    return new ApiError(StatusCodes.NOT_FOUND, message);
   }
 
   static internal(message) {
-    return new ApiError(500, message);
+    return new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, message);
   }
 
   static forbidden(message) {
-    return new ApiError(403, message);
+    return new ApiError(StatusCodes.FORBIDDEN, message);
   }
 }
 
