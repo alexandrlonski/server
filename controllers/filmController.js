@@ -2,17 +2,17 @@ const uuid = require("uuid");
 const path = require("path");
 const { Film } = require("../models/models");
 const ApiError = require("../error/ApiError");
-const { FILM } = require("../utils/errors");
+const { FILM_ERRORS } = require("../utils/errors");
 
 const createFilm = async (req, res, next) => {
   try {
     const { title, description } = req.body;
     const checkTitle = await Film.findOne({ where: { title } });
     if (checkTitle) {
-      return next(ApiError.badRequest(FILM.filmAlreadyExists));
+      return next(ApiError.badRequest(FILM_ERRORS.filmAlreadyExists));
     }
     const { img } = req.files;
-    let fileName = uuid.v4() + ".jpg";
+    const fileName = uuid.v4() + ".jpg";
     img.mv(path.resolve(__dirname, "..", "static", fileName));
 
     const film = await Film.create({
@@ -27,10 +27,8 @@ const createFilm = async (req, res, next) => {
   }
 };
 const getAllFilms = async (req, res) => {
-  let { limit, page } = req.query;
-  page = page || 1;
-  limit = limit || 5;
-  let offset = page * limit - limit;
+  const { limit = 5, page = 1 } = req.query;
+  const offset = page * limit - limit;
   const films = await Film.findAndCountAll({ limit, offset });
 
   return res.json(films);
@@ -42,7 +40,7 @@ const getOneFilm = async (req, res) => {
 };
 const deleteFilm = async (req, res) => {
   const { id } = req.params;
-  const film = await Film.destroy({ where: { id: id } });
+  const film = await Film.destroy({ where: { id } });
   return res.json(film);
 };
 
