@@ -43,5 +43,27 @@ const deleteFilm = async (req, res) => {
   const film = await Film.destroy({ where: { id } });
   return res.json(film);
 };
+const updateFilm = async (req, res, next) => {
+  const { id } = req.params;
+  const { title, description } = req.body;
+  const checkTitle = await Film.findOne({ where: { title } });
+  if (checkTitle) {
+    return next(ApiError.badRequest(FILM_ERRORS.filmAlreadyExists));
+  }
+  const { img } = req.files;
+  const fileName = uuid.v4() + ".jpg";
+  img.mv(path.resolve(__dirname, "..", "static", fileName));
+  const film = await Film.update(
+    { title, img: fileName, description },
+    { where: { id } }
+  );
+  return res.json(film);
+};
 
-module.exports = { createFilm, getOneFilm, getAllFilms, deleteFilm };
+module.exports = {
+  createFilm,
+  getOneFilm,
+  getAllFilms,
+  deleteFilm,
+  updateFilm,
+};
