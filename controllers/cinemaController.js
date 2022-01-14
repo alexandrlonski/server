@@ -27,6 +27,20 @@ const createCinema = async (req, res, next) => {
     next(ApiError.badRequest(e.message));
   }
 };
+
+const updateCinema = async (req, res, next) => {
+  const { id } = req.params;
+  const { city, name, description } = req.body;
+  const { img } = req.files;
+  const fileName = uuid.v4() + ".jpg";
+  img.mv(path.resolve(__dirname, "..", "static", fileName));
+  const cinema = await Cinema.update(
+    { name, city, description, img: fileName },
+    { where: { id } }
+  );
+  return res.json(cinema);
+};
+
 const getCinemas = async (req, res) => {
   const cinemas = await Cinema.findAndCountAll();
   return res.json(cinemas);
@@ -38,4 +52,4 @@ const deleteCinema = async (req, res) => {
   return res.json(cinema);
 };
 
-module.exports = { createCinema, getCinemas, deleteCinema };
+module.exports = { createCinema, getCinemas, deleteCinema, updateCinema };

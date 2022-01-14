@@ -54,5 +54,9 @@ const check = async (req, res, next) => {
   );
   return res.json({ token });
 };
+const getUsers = async (req, res) => {
+  const users = await User.findAndCountAll();
+  return res.json(users);
+};
 
-module.exports = { registration, login, check };
+module.exports = { registration, login, check, getUsers };
